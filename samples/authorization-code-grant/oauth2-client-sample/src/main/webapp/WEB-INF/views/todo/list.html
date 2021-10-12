@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- (1) -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Todo List</title>
+<!-- (2) -->
+<link rel="stylesheet"
+    href="../../../resources/app/css/styles.css" th:href="@{/resources/app/css/styles.css}">
+</head>
+<body>
+    <h1>Todo List</h1>
+    <div id="todoList">
+        <!-- (3) -->
+        <ul th:remove="all-but-first">
+            <!-- (4) -->
+            <li th:each="todo : ${todos}">
+                <span th:text="${todo.todoTitle}">Send a e-mail</span>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

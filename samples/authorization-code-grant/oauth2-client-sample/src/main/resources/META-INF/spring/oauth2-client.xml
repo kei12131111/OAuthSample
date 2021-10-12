@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+    xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security/oauth2 https://www.springframework.org/schema/security/spring-security-oauth2.xsd
+    ">
+    
+	<oauth2:client id="oauth2ClientContextFilter" />
+
+
+	<oauth2:resource id="todoAuthCodeGrantResource" client-id="firstSec"
+	                 client-secret="firstSecSecret"
+	                 type="authorization_code"
+	                 scope="READ,WRITE"
+	                 access-token-uri="${auth.serverUrl}/oauth/token"
+	                 user-authorization-uri="${auth.serverUrl}/oauth/authorize"/>
+	
+	<oauth2:rest-template id="todoAuthCodeGrantResourceRestTemplate" resource="todoAuthCodeGrantResource" />
+	
+	
+	<bean id="revokeRestTemplate" class="org.springframework.web.client.RestTemplate">
+	    <property name="interceptors">
+	        <list>
+	            <ref bean="basicAuthInterceptor" />
+	        </list>
+	    </property>
+	</bean>
+	
+	<bean id="basicAuthInterceptor" class="org.springframework.http.client.support.BasicAuthorizationInterceptor">
+	    <constructor-arg index="0" value="${api.auth.username}" />
+	    <constructor-arg index="1" value="${api.auth.password}" />
+	</bean>
+</beans>
